@@ -4,7 +4,7 @@ set -euo pipefail
 AG_WB_DIR="/Applications/Antigravity.app/Contents/Resources/app/out/vs/code/electron-browser/workbench"
 AG_PANEL_DIR="/Applications/Antigravity.app/Contents/Resources/app/extensions/antigravity"
 
-SRC_DIR="/Users/pepsi/Documents/auto_retry_antigravity"
+SRC_DIR="$(cd "$(dirname "$0")" && pwd)"
 SRC_WB="$SRC_DIR/auto-retry.js"
 SRC_PANEL="$SRC_DIR/auto-retry-panel.js"
 

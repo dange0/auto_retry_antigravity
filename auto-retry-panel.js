@@ -18,11 +18,24 @@
 
   function matchesRetry(el) {
     const text = getText(el);
-    return RETRY_LABELS.some(label => text.includes(label));
+    if (!text || text.length > 30) return false;
+    return RETRY_LABELS.some(label => {
+      if (text === label) return true;
+      if (text.includes(label) && text.length <= label.length + 8) return true;
+      return false;
+    });
+  }
+
+  function isSafeToClick(el) {
+    // Exact button tags are usually safe
+    if (el.tagName === "BUTTON" || (el.classList && el.classList.contains("monaco-button"))) return true;
+    // Don't click internal IDE tree structures that aren't buttons
+    if (el.closest && el.closest(".part.sidebar, .pane-header, .monaco-list, .monaco-list-row")) return false;
+    return true;
   }
 
   function clickIfRetry(el) {
-    if (!el || isDisabled(el) || !isVisible(el) || !matchesRetry(el)) return false;
+    if (!el || isDisabled(el) || !isVisible(el) || !matchesRetry(el) || !isSafeToClick(el)) return false;
     const now = Date.now();
     const prev = lastClick.get(el) || 0;
     if (now - prev < CLICK_COOLDOWN_MS) return false;
